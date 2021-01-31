@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSCredentialsProviderChain;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
@@ -40,10 +43,14 @@ public class HelloWorldController {
         AmazonS3 s3Client=null;
         
         try {
-            s3Client = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new ProfileCredentialsProvider())
-                    .withRegion(clientRegion)
-                    .build();
+			/*
+			 * s3Client = AmazonS3ClientBuilder.standard() .withCredentials(new
+			 * ProfileCredentialsProvider()) .withRegion(clientRegion) .build();
+			 */
+        	
+        	AWSCredentialsProvider provider = new AWSCredentialsProviderChain(new InstanceProfileCredentialsProvider(true),new ProfileCredentialsProvider());
+			s3Client  = AmazonS3ClientBuilder.standard().withRegion(clientRegion).withCredentials(provider).build();
+
 
             System.out.println("Listing objects"+s3Client.listBuckets());
 
