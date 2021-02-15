@@ -21,18 +21,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core -->
+<dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-java-sdk-core</artifactId>
+    <version>1.11.954</version>
+</dependency>
+		
+		
 <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
 <dependency>
     <groupId>com.amazonaws</groupId>
     <artifactId>aws-java-sdk-s3</artifactId>
-    <version>1.11.946</version>
+    <version>1.11.954</version>
 </dependency>
 
-<dependency>
+
+<!-- <dependency>
     <groupId>software.amazon.awssdk</groupId>
     <artifactId>auth</artifactId>
     <version>2.15.72</version>
-</dependency>
+</dependency> -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -47,6 +56,39 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.9</version>
+				<configuration>
+					<repository>vermashwani/${project.artifactId}</repository>
+				</configuration>
+			</plugin>
+			
 		</plugins>
 	</build>
 
